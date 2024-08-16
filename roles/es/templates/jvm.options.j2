@@ -1,0 +1,4 @@
+{% if es_jvm_heap_size is defined %}
+-Xms{{ es_jvm_heap_size }}
+-Xmx{{ es_jvm_heap_size }}
+{% endif %}

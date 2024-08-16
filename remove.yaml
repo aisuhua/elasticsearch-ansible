@@ -1,0 +1,32 @@
+---
+- name: remove cluster
+  hosts: all
+  become: true
+  gather_facts: true
+
+  roles:
+    - init
+  
+  tasks:
+    - name: stop es service
+      service:
+        name: "{{ es_service_name }}"
+        enabled: false
+        state: stopped
+      ignore_errors: yes
+
+    - name: remove systemd service file
+      file:
+        path: "/etc/systemd/system/{{ es_service_name }}.service"
+        state: absent
+
+    - name: remove cluster folder
+      file:
+        path: "{{ es_install_dir }}"
+        state: absent
+
+    - name: remove service user
+      user:
+        name: "{{ es_run_user }}"
+        state: absent
+        move_home: yes

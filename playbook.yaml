@@ -1,0 +1,10 @@
+---
+- name: install es
+  hosts: all
+  become: true
+  gather_facts: true
+
+  roles:
+    - init
+    - es
+  

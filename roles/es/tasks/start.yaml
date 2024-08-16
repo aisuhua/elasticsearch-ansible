@@ -1,0 +1,4 @@
+- name: start service
+  service:
+    name: "{{ es_service_name }}"
+    state: started

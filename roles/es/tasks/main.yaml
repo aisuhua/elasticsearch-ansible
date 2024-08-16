@@ -1,0 +1,6 @@
+- include: preinstall.yaml
+- include: install.yaml
+- include: configure.yaml
+- include: plugin.yaml
+- include: start.yaml
+- include: postinstall.yaml

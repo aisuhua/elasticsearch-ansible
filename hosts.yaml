@@ -1,0 +1,35 @@
+ungrouped:
+  hosts:
+    node1-es1:
+      ansible_ssh_host: 172.31.96.149 
+      es_http_port: 19201 
+      es_transport_port: 19301
+    node2-es1:
+      ansible_ssh_host: 172.31.96.149 
+      es_http_port: 19202
+      es_transport_port: 19302
+    node3-es1:
+      ansible_ssh_host: 172.31.96.149 
+      es_http_port: 19203
+      es_transport_port: 19303
+  vars:
+    es_cluster_name: es1
+    es_version: 8.14.3
+    es_install_dir: /opt/elasticsearch/{{ es_version }}/{{ inventory_hostname }}
+    es_service_name: elasticsearch-{{ es_version }}-{{ inventory_hostname  }}
+    es_run_user: elastic
+    es_run_group: elastic
+    es_run_password: akP2$HTw
+    es_download_url: http://192.168.88.61/other/elasticsearch-8.14.3-linux-x86_64.tar.gz
+    es_plugins:
+      - name: analysis-ik
+        download_url: http://192.168.88.61/other/elasticsearch-analysis-ik-8.14.3.zip
+      - name: analysis-pinyin
+        download_url: http://192.168.88.61/other/elasticsearch-analysis-pinyin-8.14.3.zip
+    es_builtin_users:
+      - username: elastic
+        password: akP2$HTw
+      - username: kibana_system
+        password: akP2$HTw
+    # jvm options just for test
+    es_jvm_heap_size: 512m

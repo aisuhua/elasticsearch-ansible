@@ -1,0 +1,35 @@
+- name: set /etc/hosts
+  lineinfile:
+    path: /etc/hosts
+    line: "{{ hostvars[item].ansible_ssh_host }} {{ hostvars[item].inventory_hostname }}.wildcard.net"
+    state: present
+  loop: "{{ groups['all'] }}"
+
+- name: create service user
+  user:
+    name: "{{ es_run_user }}"
+    password: "{{ es_run_password | password_hash('sha512') }}"
+    update_password: on_create
+    state: present
+
+- name: ensure install dir is exists
+  file:
+    path: "{{ es_install_dir }}"
+    state: directory
+    owner: "{{ es_run_user }}"
+    group: "{{ es_run_group }}"
+
+- name: check es is installed or not
+  stat:
+    path: "{{ es_install_dir }}/bin/elasticsearch"
+  register: es_status
+
+- name: download es
+  unarchive:
+    src: "{{ es_download_url }}"
+    dest: "{{ es_install_dir }}"
+    remote_src: yes
+    extra_opts: "--strip-components=1"
+    owner: "{{ es_run_user }}"
+    group: "{{ es_run_group }}"
+  when: not es_status.stat.exists 

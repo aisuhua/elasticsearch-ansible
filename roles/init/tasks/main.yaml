@@ -1,0 +1,7 @@
+---
+
+# https://github.com/ansible/ansible/issues/18665#issuecomment-350144774
+- set_fact:
+    ansible_python_interpreter: /usr/bin/python3
+  when: 
+    - ansible_distribution == 'Kylin Linux Advanced Server'

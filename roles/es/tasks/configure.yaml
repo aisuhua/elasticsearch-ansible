@@ -1,0 +1,45 @@
+- name: create certs dir
+  file:
+    path: "{{ es_install_dir }}/config/certs"
+    state: directory
+    owner: "{{ es_run_user }}"
+    group: "{{ es_run_group }}"
+
+- name: copy pem to certs dir
+  copy:
+    src: "certs/{{ item }}"
+    dest: "{{ es_install_dir }}/config/certs/{{ item }}"
+    owner: "{{ es_run_user }}"
+    group: "{{ es_run_group }}"
+  loop: 
+    - ca.pem
+    - wildcard.net.pem
+    - wildcard.net-key.pem
+  notify: restart es
+
+- name: set elasticsearch.yml config
+  template:
+    src: elasticsearch.yml.j2
+    dest: "{{ es_install_dir }}/config/elasticsearch.yml"
+    owner: "{{ es_run_user }}"
+    group: "{{ es_run_group }}"
+  notify: restart es
+
+- name: set jvm.options
+  template:
+    src: jvm.options.j2
+    dest: "{{ es_install_dir }}/config/jvm.options.d/jvm.options"
+    owner: "{{ es_run_user }}"
+    group: "{{ es_run_group }}"
+  notify: restart es
+
+- name: set elasticsearch.service config
+  template:
+    src: elasticsearch.service.j2
+    dest: "/etc/systemd/system/{{ es_service_name }}.service"
+  notify: 
+    - systemctl daemon-reload
+    - restart es
+
+- name: ensuring that handlers are executed
+  meta: flush_handlers

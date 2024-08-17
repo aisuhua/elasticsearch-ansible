@@ -10,4 +10,3 @@
   when: item.name not in plugin_result.stdout
   loop: "{{ es_plugins }}"
   notify: restart es
-

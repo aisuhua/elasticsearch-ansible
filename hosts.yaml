@@ -31,5 +31,6 @@ ungrouped:
         password: akP2$HTw
       - username: kibana_system
         password: akP2$HTw
-    # jvm options just for test
-    es_jvm_heap_size: 512m
+    es_jvm_options:
+      - -Xms512m
+      - -Xmx512m

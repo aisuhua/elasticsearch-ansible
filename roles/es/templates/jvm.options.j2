@@ -1,4 +1,5 @@
-{% if es_jvm_heap_size is defined %}
--Xms{{ es_jvm_heap_size }}
--Xmx{{ es_jvm_heap_size }}
+{% if es_jvm_options is defined %}
+{% for jvm_option in es_jvm_options %}
+{{ jvm_option }}
+{% endfor %}
 {% endif %}

@@ -1,0 +1,87 @@
+- name: wait for http port is listening
+  wait_for:
+    port: "{{ es_http_port }}"
+    timeout: 300
+
+- name: check builtin user password 
+  uri:
+    url: "https://{{ ansible_ssh_host }}:{{ es_http_port }}/_security/_authenticate?pretty"
+    user: "{{ item.username }}"
+    password: "{{ item.password }}"
+    method: GET
+    force_basic_auth: yes
+    validate_certs: false
+    status_code: [200, 401]
+  changed_when: false
+  loop: "{{ es_builtin_users }}"
+  run_once: true
+  register: builtin_pass_result
+
+- name: set flag for password update
+  set_fact:
+    update_password: true
+  changed_when: true
+  run_once: true
+  when:
+    - item.status == 401
+  loop: "{{ builtin_pass_result.results }}"
+
+- name: check super user is exist
+  shell: "{{ es_install_dir }}/bin/elasticsearch-users list"
+  become_user: "{{ es_run_user }}"
+  register: superuser_status
+  changed_when: false
+  run_once: true 
+
+- name: add super user
+  shell: "{{ es_install_dir }}/bin/elasticsearch-users useradd {{ es_superuser_username }} -p '{{ es_superuser_password }}' -r superuser"
+  become_user: "{{ es_run_user }}"
+  changed_when: true
+  register: superuser_added_result 
+  run_once: true
+  when:
+    - update_password is defined
+    - "es_superuser_username | string not in superuser_status.stdout"
+
+- name: wait_for 10 seconds after add super user
+  wait_for:
+    timeout: 10
+  run_once: true
+  delegate_to: 127.0.0.1
+  changed_when: true
+  when: 
+    - superuser_added_result is defined
+    - superuser_added_result is changed
+
+- name: update builtin user password
+  uri:
+    url: "https://{{ ansible_ssh_host }}:{{ es_http_port }}/_security/user/{{ item.item.username }}/_password?pretty"
+    user: "{{ es_superuser_username }}"
+    password: "{{ es_superuser_password }}"
+    method: POST
+    body_format: json
+    body: '{ "password": "{{ item.item.password }}" }'
+    force_basic_auth: yes
+    validate_certs: false
+    status_code: [200, 201]
+  loop: "{{ builtin_pass_result.results }}"
+  run_once: true
+  when:
+    - item.status == 401
+  changed_when: true
+
+- name: delete super user if already exists
+  shell: "{{ es_install_dir }}/bin/elasticsearch-users userdel {{ es_superuser_username }}"
+  become_user: "{{ es_run_user }}"
+  changed_when: true
+  run_once: true
+  when: 
+    - superuser_added_result is defined
+    - superuser_added_result is changed
+
+- name: delete super user after added
+  shell: "{{ es_install_dir }}/bin/elasticsearch-users userdel {{ es_superuser_username }}"
+  become_user: "{{ es_run_user }}"
+  changed_when: true
+  run_once: true
+  when: "es_superuser_username | string in superuser_status.stdout"

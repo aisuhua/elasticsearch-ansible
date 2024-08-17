@@ -1,6 +1,9 @@
 - include: preinstall.yaml
 - include: install.yaml
 - include: configure.yaml
-- include: plugin.yaml
+- include: plugins.yaml
+  when: es_plugins is defined
 - include: start.yaml
-- include: postinstall.yaml
+- include: builtin_users.yaml
+  when: es_builtin_users is defined
+  tags: test

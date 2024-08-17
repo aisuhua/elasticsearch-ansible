@@ -6,4 +6,3 @@
 - include: start.yaml
 - include: builtin_users.yaml
   when: es_builtin_users is defined
-  tags: test

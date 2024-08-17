@@ -7,4 +7,6 @@
   roles:
     - init
     - es
+    #- es_repo
+    #- es_slm_policy
   

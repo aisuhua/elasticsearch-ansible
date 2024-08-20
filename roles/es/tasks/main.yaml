@@ -3,6 +3,11 @@
 - include: configure.yaml
 - include: plugins.yaml
   when: es_plugins is defined
+  tags: plugins
 - include: start.yaml
 - include: builtin_users.yaml
   when: es_builtin_users is defined
+  tags: users 
+- include: keystores.yaml
+  when: es_keystores is defined
+  tags: keystores

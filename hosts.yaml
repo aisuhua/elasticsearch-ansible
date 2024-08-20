@@ -34,22 +34,8 @@ ungrouped:
     es_jvm_options:
       - -Xms512m
       - -Xmx512m
-    # TODO
-    es_repos:
-      - type: s3
-        name: s3repo1
-        bucket: test
-        access_key: suhua
-        secret_key: suhua123
-        client: client1
-        base_path: /
-        endpoint: 192.168.88.61 
-        protocol: http
-    # TODO
-    es_slm_policies:
-      - name: <daily-snap-{now/d}>
-        schedule: "0 30 20 * * ?"
-        repository: s3repo1
-        retention: 
-          expire_after: 30d
-          max_count: 30
+    es_keystores:
+      - key: s3.client.default.access_key
+        value: suhua
+      - key: s3.client.default.secret_key
+        value: suhua123

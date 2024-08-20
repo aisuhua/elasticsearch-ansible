@@ -15,7 +15,7 @@
   changed_when: false
   loop: "{{ es_builtin_users }}"
   run_once: true
-  register: builtin_pass_result
+  register: builtin_user_status
 
 - name: set flag for password update
   set_fact:
@@ -24,7 +24,7 @@
   run_once: true
   when:
     - item.status == 401
-  loop: "{{ builtin_pass_result.results }}"
+  loop: "{{ builtin_user_status.results }}"
 
 - name: check super user is exist
   shell: "{{ es_install_dir }}/bin/elasticsearch-users list"
@@ -64,7 +64,7 @@
     force_basic_auth: yes
     validate_certs: false
     status_code: [200, 201]
-  loop: "{{ builtin_pass_result.results }}"
+  loop: "{{ builtin_user_status.results }}"
   run_once: true
   when:
     - item.status == 401

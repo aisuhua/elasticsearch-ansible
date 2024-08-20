@@ -7,6 +7,17 @@
 - name: install plugin
   shell: "echo y | {{ es_install_dir }}/bin/elasticsearch-plugin install {{ item.download_url }}"
   become_user: "{{ es_run_user }}"
-  when: item.name not in plugin_result.stdout
+  when: 
+    - item.name not in plugin_result.stdout
+    - item.state is not defined or item.state == 'present'
+  loop: "{{ es_plugins }}"
+  notify: restart es
+
+- name: remove plugin
+  shell: "{{ es_install_dir }}/bin/elasticsearch-plugin remove --purge {{ item.name  }}"
+  become_user: "{{ es_run_user }}"
+  when: 
+    - item.name in plugin_result.stdout
+    - item.state is defined and item.state == 'absent'
   loop: "{{ es_plugins }}"
   notify: restart es

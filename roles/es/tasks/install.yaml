@@ -8,8 +8,8 @@
 - name: create service user
   user:
     name: "{{ es_run_user }}"
-    password: "{{ es_run_password | password_hash('sha512') }}"
-    update_password: on_create
+    shell: /usr/sbin/nologin
+    create_home: no
     state: present
 
 - name: ensure install dir is exists

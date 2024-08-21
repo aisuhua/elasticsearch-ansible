@@ -19,7 +19,6 @@ ungrouped:
     es_service_name: elasticsearch-{{ es_version }}-{{ inventory_hostname  }}
     es_run_user: elastic
     es_run_group: elastic
-    es_run_password: akP2$HTw
     es_download_url: http://192.168.88.61/other/elasticsearch-8.14.3-linux-x86_64.tar.gz
     es_plugins:
       - name: analysis-ik

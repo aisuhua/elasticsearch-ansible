@@ -68,8 +68,10 @@ PUT _slm/policy/daily-snapshots
 
 - https://github.com/elastic/ansible-elasticsearch 参考 keystore 设计
 - [在Ansible中非交互式修改elastic的密码](https://blog.csdn.net/m0_45985412/article/details/119823902) 修改 elastic 密码
+- [ELK非交互修改elastic密码（转载）](https://blog.espnlol.com/?p=582)
 - [X-Pack Authentication issue](https://discuss.elastic.co/t/x-pack-authentication-issue/121632) 
 - [Change passwords API](https://www.elastic.co/guide/en/elasticsearch/reference/8.15/security-api-change-password.html)
 - [elasticsearch-keystore](https://www.elastic.co/guide/en/elasticsearch/reference/current/elasticsearch-keystore.html)
 - [S3 repository](https://www.elastic.co/guide/en/elasticsearch/reference/current/repository-s3.html)
 - [Secure settings](https://www.elastic.co/guide/en/elasticsearch/reference/8.15/secure-settings.html)
+- [How to add user and group without a password using Ansible?](https://stackoverflow.com/questions/36290485/how-to-add-user-and-group-without-a-password-using-ansible) 创建程序用户

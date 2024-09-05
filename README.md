@@ -20,6 +20,22 @@ ansible-playbook playbook.yaml
 ansible-playbook remove.yaml
 ```
 
+## 测试
+
+```sh
+# 查看集群健康状态
+$ curl https://172.31.96.151:19201/_cat/health -k -u elastic -p
+Enter host password for user 'elastic':
+1725539414 12:30:14 es1 green 3 3 68 34 0 0 0 0 - 100.0%
+
+# 查看集群节点
+$ curl https://172.31.96.151:19201/_cat/nodes -k -u elastic -p
+Enter host password for user 'elastic':
+172.31.96.151 57 94 28 0.31 1.14 3.47 cdfhilmrstw - node3-es1
+172.31.96.151 59 94 28 0.31 1.14 3.47 cdfhilmrstw * node1-es1
+172.31.96.151 60 94 28 0.31 1.14 3.47 cdfhilmrstw - node2-es1
+```
+
 ## 特点
 
 - 可离线安装

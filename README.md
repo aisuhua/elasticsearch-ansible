@@ -78,6 +78,29 @@ PUT _slm/policy/daily-snapshots
     "max_count": 7
   }
 }
+
+# 创建索引保留策略
+PUT _ilm/policy/applog
+{
+  "policy": {
+    "phases": {
+      "hot": {
+        "actions": {
+          "rollover": {
+            "max_age": "1d",
+            "max_primary_shard_size": "50gb"
+          }
+        }
+      },
+      "delete": {
+        "min_age": "7d",
+        "actions": {
+          "delete": {}
+        }
+      }
+    }
+  }
+}
 ```
 
 ## 参考
